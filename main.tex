@@ -1,0 +1,79 @@
+\documentclass[windows]{dlmudoctrans}
+% 这个地方也可以参考 dlmuthesis 中的命令用法，实际上这部分代码就是从 dlmuthesis
+% 里面迁移过来的。链接地址在：<https://github.com/JohnsonLo00/dlmuthesis>。
+%
+% 简单的来说，`\entitle' 对应的花括号里面写论文翻译以前原来的标题；`\cntitle'
+% 里面写翻译之后的中文标题。然后估算一下自己的标题排版到封面上之后占据几行的下
+% 划线，估计出来是三行，就在前面的方括号 `[  ]' 里面写 3；如果估计出来是两行，
+% 就在前面的方括号 `[  ]' 里面写 2，以此类推。由于显示效果的限制，模板并不会根
+% 据你给出的文本长度动态调整行数的指定，换句话说，最初编译出来的文档最初编译出
+% 来的文档可能会有格式问题，也就是说，可能会因为指定的行数不够出现文字重叠的情
+% 况。对于这种情况，你需要再回来手动加行数，然后再编译。
+\entitle[3]{
+  Unofficial \LaTeX Template for Translation of Foreign Language Documents for
+  Undergraduate students of Dalian Maritime University
+}
+\cntitle[2]{非官方大连海事大学本科生毕业外文文献翻译\LaTeX{}模板}
+\author{你的名字}
+\sdtID{2220XXXXXX}
+\major{这里写专业年级班级}
+
+% 导入一个 BIB 文件，用来载入参考文献的信息。BIB 文件的写法可以自己早参考资料，
+% 但大部分英文文献平台都支持直接将参考文献条目导出为 BIB 引用格式。如果你再线上
+% 文献平台找到了你要翻译的文献，一般都可以直接在文献对应的“参考”页面下面找到
+% 所有参考文献的列标及每个文件对应的链接。
+\addbibresource{refs.bib}
+% 这里还需要额外提醒用户注意一下：在 dlmuthesis 项目中，引用文献采用的是
+% `natbib'，但是本项目中却是 `biblatex'。这是出于很多原因的考量，此不赘述了。
+
+% 下面这段按代码是用于展示批注功能的，如果不使用批注功能，可以暂时注释掉。我觉
+% 得对于本科文献翻译来说，应该是用不到这个功能。
+\let\comment\undefined
+\usepackage[]{changes}
+\definechangesauthor[name={阿海}, color=blue]{阿海} % 创建批注者信息
+\definechangesauthor[name={海老师}, color=red]{海老师} % 创建批注者信息
+% 但是要当心，因为在示例的章节 `mainbody/ch4.tex' 当中展示到了这个功能，所以直
+% 接注释掉，如果不删掉第四章里的示例内容，会导致示例文档编译不通过。不过不影响
+% 文档类本身的使用。
+\begin{document}
+
+% `\makepages' 用来生成符合要求的封面格式。
+\makepages
+
+% 这里是论文的摘要部分。你可以在这里写你的摘要，或者单独另外新建一个“*.tex”文
+% 件，然后使用 `\input{}' 命令导入文件里的内容，都是可以的。视具体情况而定。
+\begin{abstract}
+  本文针对手机摄像头所获取的视频文件，进行手势运动方向的检测。针对低端摄像头视
+  频图像的特点，本文采用了基于背景去除和肤色模型的方法对手部区域进行检测，并判
+  别手部运动的方向。
+
+  首先，获取视频图像序列，即从视频文件中获取每一帧图像作为待检测的视频图像序
+  列；其次，对获取的视频图像序列中的每一帧图像进行颜色模型转换、背景去除、图像
+  二值化、形态学处理等预处理；然后,利用区域增长方法来检测视频图像序列中的手部连
+  通区域，并计算每帧图像中手部区域的中心；最后根据图像序列中手部区域中心位置的
+  变化来判断手部运动方向。
+
+  本文在Visual c++6.0开发环境下，借助于OpenCV开放平台，设计并实现了基于低端摄像
+  头视频手势运动检测系统，得到了较好的检测效果。
+
+  \keywords{\LaTeX{}, 文档类, 模板}
+\end{abstract}
+
+\tableofcontents\thispagestyle{plain}
+\clearpage % 这个换页命令是格式要求，不要删除。
+
+% `\pesudohookOFpremainbody' 命令是用来设置正文格式的，因为文档类设计的原因，
+% `abstract' 环境开始时有一个用于初始化的钩子，会变更诸如页眉页脚之类的设置，但
+% 是正文和摘要之间隔着一个目录，又不能在摘要环境的末尾直接加钩子，否则目录页的
+% 格式就会变成和正文一样，这是不符合要求的。所以需要这个命令改回来。除此之外，
+% 这个命令还会生成全文正文部分最开头出现一次的文章中文大标题，所以需要放在这个
+% 位置 (目录页后、正文开始之前)，不要删掉。
+\pesudohookOFpremainbody
+\input{mainbody/ch1} \clearpage
+\input{mainbody/ch2} \clearpage
+\input{mainbody/ch3} \clearpage
+\input{mainbody/ch4} \clearpage
+\input{mainbody/conclusion} \clearpage % 结论
+
+\printbibliography[heading=dlmustyled] % 参考文献
+\end{document}

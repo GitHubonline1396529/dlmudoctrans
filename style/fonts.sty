@@ -1,0 +1,157 @@
+%
+% This is file "fonts.sty"
+%
+% Copyright (C) 2025 by Githubonline1396529 <yyg249942899@163.com>
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   https://www.latex-project.org/lppl.txt
+% and version 1.3c or later is part of all distributions of LaTeX
+% version 2008 or later.
+%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{style/fonts}[
+2025/04/20 v1.0 The fonts setup for DLMU DocTrans. Version 0.0.1.2.]
+
+\RequirePackage{iftex}
+\RequirePackage{ifthen}
+\RequirePackage{fontspec}
+
+% For different platforms, the font setup is different. The default is 
+% `windows'. And if the user is using any other platform, this document class 
+% can automatically adaptive to the platform and set the font.
+\if@dlmudoctrans@windows
+  \IfFontExistsTF{SimSun}{
+    \setCJKmainfont{SimSun}[AutoFakeBold=3.0, AutoFakeSlant=0.3]
+  }{
+    \IfFontExistsTF{./misc/SimSun.ttc}{
+      \setCJKmainfont{SimSun}[Path={./misc/}, AutoFakeBold=3.0, AutoFakeSlant=0.3]
+    }{
+      \ClassError{dlmudoctrans}{The ZHONGYI fontset does not exists}{}
+    }
+  }
+  \IfFontExistsTF{Times New Roman}{
+    \setmainfont{Times New Roman}
+  }{
+    \IfFontExistsTF{./misc/times.ttf}{
+      \setmainfont{times}[
+        Path={./misc/},
+        Extension = .ttf,
+        UprightFont = times,
+        BoldFont = timesbd,
+        ItalicFont = timesi,
+        BoldItalicFont = timesbi,
+      ]
+    }{
+      \ClassError{dlmudoctrans}{The Times New Roman font does not exists}{}
+    }
+  }
+
+\else\if@dlmudoctrans@macos
+  \IfFontExistsTF{STSong}{
+    \setCJKmainfont{STSong}[AutoFakeBold=5.0, AutoFakeSlant=0.3]
+  }{
+    % The following implementation is for the MacOS system. If the `STSong'
+    % fontset is manually placed in the `./misc/' directory, it can be used.
+    \IfFontExistsTF{./misc/STSong.ttf}{
+      \setCJKmainfont{STSong}[
+        Path={./misc/},
+	AutoFakeBold=5.0,
+	AutoFakeSlant=0.3
+      ]
+    }{
+      \ClassError{dlmudoctrans}{The HUAWEN fontset does not exists}{}
+    }
+    %
+  }
+  \IfFontExistsTF{Times New Roman}{
+    \setmainfont{Times New Roman}
+  }{
+    \IfFontExistsTF{./misc/times.ttf}{
+      \setmainfont{times}[
+        Path={./misc/},
+        Extension = .ttf,
+        UprightFont = times,
+        BoldFont = timesbd,
+        ItalicFont = timesi,
+        BoldItalicFont = timesbi,
+      ]
+    }{
+      \ClassError{dlmudoctrans}{The Times New Roman font does not exists}{}
+    }
+  }
+
+\else\if@dlmudoctrans@ubuntu
+  \IfFontExistsTF{FandolSong}{
+    \setCJKmainfont{FandolSong}[AutoFakeBold=3.0, AutoFakeSlant=0.3]
+  }{
+    \ClassError{dlmudoctrans}{The Fandol fontset does not exists}{}
+  }
+  \IfFontExistsTF{Times New Roman}{
+    \setmainfont{Times New Roman}
+  }{
+    \IfFontExistsTF{./misc/times.ttf}{
+      \setmainfont{times}[
+        Path={./misc/},
+        Extension = .ttf,
+        UprightFont = times,
+        BoldFont = timesbd,
+        ItalicFont = timesi,
+        BoldItalicFont = timesbi,
+      ]
+    }{
+      \setmainfont{TeX Gyre Termes} % The default font of the distribution.
+    }
+  }
+\else\if@dlmudoctrans@web
+  \IfFontExistsTF{FandolSong}{
+    \setCJKmainfont{FandolSong}[AutoFakeBold=3.0, AutoFakeSlant=0.3]
+  }{
+    \ClassError{dlmudoctrans}{The Fandol fontset does not exists}{}
+  }
+  \IfFontExistsTF{Times New Roman}{
+    \setmainfont{Times New Roman}
+  }{
+    \IfFontExistsTF{./misc/times.ttf}{
+      \setmainfont{times}[
+        Path={./misc/},
+        Extension = .ttf,
+        UprightFont = times,
+        BoldFont = timesbd,
+        ItalicFont = timesi,
+        BoldItalicFont = timesbi,
+      ]
+    }{
+      \setmainfont{TeX Gyre Termes}
+    }
+  }
+\else\if@dlmudoctrans@customization
+  \typeout{This is customization mode. All fonts used are customized.}
+\fi\fi\fi\fi\fi
+\if@dlmudoctrans@macos
+  \AddToHook{cmd/heiti/after}[heiti_with_bold]{\bfseries}
+\fi
+\if@dlmudoctrans@windows
+  % For any platform except `windows', the `songti' font should be manually 
+  % defined as `rm' to ensure the correct display.
+  \typeout{dlmudoctrans: original \protect\songti\space}
+\else
+  \typeout{dlmudoctrans: temporarily redefine \protect\songti\space in lof}
+  \AddToHook{cmd/listoffigures/before}[redefine_songti_in_lof]{
+    \let\oldsongti\songti
+    \renewcommand{\songti}{\oldsongti\rm}
+  }
+  \AddToHook{cmd/listoffigures/after}[back_to_orisongti_in_lof]{
+    \let\songti\oldsongti
+  }
+  \typeout{dlmudoctrans: temporarily redefine \protect\songti\space in lot}
+  \AddToHook{cmd/listoftables/before}[redefine_songti_in_lot]{
+    \let\oldsongti\songti
+    \renewcommand{\songti}{\oldsongti\rm}
+  }
+  \AddToHook{cmd/listoftables/after}[back_to_orisongti_in_lot]{
+    \let\songti\oldsongti
+  }
+\fi

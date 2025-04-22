@@ -1,0 +1,87 @@
+%
+% This is file "thecover.sty"
+%
+% Copyright (C) 2025 by Githubonline1396529 <yyg249942899@163.com>
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   https://www.latex-project.org/lppl.txt
+% and version 1.3c or later is part of all distributions of LaTeX
+% version 2008 or later.
+%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{style/thecover}[2025/04/20 v1.0 The Cover.  Version 0.0.1.2.]
+
+\RequirePackage{etoolbox}
+\RequirePackage{xpatch}
+\RequirePackage{xparse}
+\RequirePackage{array} % Related to the table on the title page.
+\RequirePackage{float}
+
+% Counter for estimating and dynamically adjusting the number of lines in the
+% title page table
+\newcounter{CounterOfAddClineCn}
+\newcounter{CounterOfAddClineEn}
+\setcounter{CounterOfAddClineCn}{0}
+\setcounter{CounterOfAddClineEn}{0}
+
+% Define the macro: the cycled part.
+\def\AddCline{\\ \cline{2-2}}
+
+\newcommand{\makepages}{
+  \thispagestyle{empty} % No footer and header.
+  \setlength{\extrarowheight}{9bp} % Adjust the row height of tables on cover.
+  \vspace*{42pt}
+  \begin{center}
+    \bfseries\fontsize{26pt}{26pt}\selectfont 文~ 献~ 翻~ 译
+  \end{center}
+  \vspace*{72pt}
+  \begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.0} % Adjust the line spacing in table.
+    \begin{tabular}
+      {
+      >{\vspace{-0.3\baselineskip}}m{2.54cm}
+      >{\vspace{-0.3\baselineskip}}m{12cm}
+      }
+      \bfseries\fontsize{16bp}{24bp}\selectfont 原文标题 &
+      \multirow[t]{2}{12.0cm}{\arraybackslash\bfseries% Warp here.
+      \fontsize{16bp}{24bp}\selectfont\centering\dlmudoctrans@tokens@entitle}
+      \whiledo{\value{CounterOfAddClineEn}<\value{InputLineEn}}{
+        \AddCline
+        \stepcounter{CounterOfAddClineEn}
+      }
+      \bfseries\fontsize{16bp}{24bp}\selectfont 译文标题 &
+      \multirow[t]{2}{12.0cm}{\arraybackslash\bfseries% Warp here.
+      \fontsize{16bp}{24bp}\selectfont\centering\dlmudoctrans@tokens@cntitle}
+      \whiledo{\value{CounterOfAddClineCn}<\value{InputLineCn}}{
+        \AddCline
+        \stepcounter{CounterOfAddClineCn}
+      }
+    \end{tabular}
+  \end{table}
+  \vspace*{42pt}
+  \begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}
+      {
+      >{\fontsize{16bp}{16bp}\selectfont}m{3.8cm}
+      >{\centering\arraybackslash\fontsize{16bp}{16bp}\selectfont}p{8.0cm}
+      }
+      \selectfont\fangsong 姓\hfill 名: & %
+      \selectfont\fangsong\dlmudoctrans@tokens@author \\
+      \cline{2-2}
+      \selectfont\fangsong 学\hfill 号: & %
+      \selectfont\fangsong\dlmudoctrans@tokens@sdtID \\
+      \cline{2-2}
+      \selectfont\fangsong 专\hfill 业\hfill 年\hfill 级\hfill 班\hfill 级: & %
+      \selectfont\fangsong\dlmudoctrans@tokens@major \\
+      \cline{2-2}
+    \end{tabular}
+  \end{table}
+  \vfill
+  \clearpage
+}
