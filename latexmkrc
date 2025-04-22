@@ -1,4 +1,5 @@
-
+# This file is migrated from dlmuthesis. See the original repo at
+#   <https://github.com/JohnsonLo00/dlmuthesis>
 $pdf_mode = 5; # xelatex
 
 $xelatex = "xelatex -file-line-error -no-pdf -synctex=1 %O %S";
