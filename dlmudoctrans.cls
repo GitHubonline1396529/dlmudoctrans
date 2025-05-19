@@ -14,7 +14,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{dlmudoctrans}[
 2025-04-20 Unofficial LaTeX Document Translation Template for Dalian
-Maritime University. Version 0.0.1.2.
+Maritime University. Version 0.0.1.4-beta.
 ]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Class options. 
@@ -87,8 +87,8 @@ Just choose `xelatex', no `pdflatex' or `latex' and so on.}
 \fi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CTeX package setup. Note that some of the following codes are migrated from 
-% the `dlmudoctrans.' project. The original author is JohnsonLo00. You can visit
-% the project at <https://github.com/JohnsonLo00/dlmudoctrans>.
+% the `dlmudoctrans.' project. The original author is JohnsonLo00. You can
+% visit the project at <https://github.com/JohnsonLo00/dlmudoctrans>.
 \RequirePackage[UTF8, heading=true, zihao = -4]{ctex}
 \RequirePackage{totcount} % For counting the number of pages.
 
@@ -123,45 +123,25 @@ Just choose `xelatex', no `pdflatex' or `latex' and so on.}
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Document metadata settings. The following implementations are used to set the
-% document metadat (titles, authors, etc.) in the preamble. The user can use
-% them.
+% document metadat (titles, translator, etc.) in the preamble. The user can 
+% use them.
+%
+% Note that `translator' is used to display the name of the "author of the 
+% translation document", or "the author displayed on the cover page", which 
+% means, the translator, which also means, the student's name. So that I can
+% leave the original `\author' command unchanged to display the real author of
+% the original document (book or article).
 \RequirePackage{etoolbox}
+\RequirePackage{authblk} % For the author and affiliation.
 
 % Variables for the title page (Metadata).
 \newcommand{\dlmudoctrans@tokens@cntitle}{~} % Chinese title.
 \newcommand{\dlmudoctrans@tokens@entitle}{~} % English title.
-\newcommand{\dlmudoctrans@tokens@author}{~} % Name of the author.
+\newcommand{\dlmudoctrans@tokens@translator}{~} % Name of the author.
 \newcommand{\dlmudoctrans@tokens@sdtID}{~} % Student ID.
 \newcommand{\dlmudoctrans@tokens@major}{~} % Major in Chinese.
 
-% Defines counters to estimate the expected lines of text of the title in both
-% Chinese and English.
-\newcounter{InputLineCn}
-\newcounter{InputLineEn}
-
-% For the Chinese title.
-\NewDocumentCommand{\cntitle}{O{1} m}{
-  % The expected lines of text of the Chinese title. Defaut is 1.
-  \setcounter{InputLineCn}{#1}
-  \renewcommand{\dlmudoctrans@tokens@cntitle}{#2}
-  \newcommand{\cntitleinMAINBODY}{
-  \vspace*{1ex}{}
-  \begin{center}
-    {\zihao{3}\bfseries #2}
-  \end{center}{}\vspace*{1ex}{}}
-}
-
-% For the English title.
-\NewDocumentCommand{\entitle}{O{1} m}{
-  % The expected lines of text of the English title. Defaut is 1.
-  \setcounter{InputLineEn}{#1}
-  \renewcommand{\dlmudoctrans@tokens@entitle}{#2}
-}
-
-\renewcommand{\author}[1]{\renewcommand{\dlmudoctrans@tokens@author}{#1}}
-\newcommand{\sdtID}[1]{\renewcommand{\dlmudoctrans@tokens@sdtID}{#1}}
-\newcommand{\major}[1]{\renewcommand{\dlmudoctrans@tokens@major}{#1}}
-
+\RequirePackage{style/titlefmt} % The title format setup.
 \RequirePackage{style/thecover} % The title page style.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Page layout setups.
@@ -203,6 +183,12 @@ Just choose `xelatex', no `pdflatex' or `latex' and so on.}
 {\contentspush{\thecontentslabel}~~}
 {}
 {\titlerule*[8bp]{.}\contentspage}
+
+\newcommand{\maketocpages}{
+  \tableofcontents\thispagestyle{plain}
+  \clearpage
+}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Abstract format setup.
 \RequirePackage{abstract}
@@ -225,15 +211,18 @@ Just choose `xelatex', no `pdflatex' or `latex' and so on.}
 % Format setting for the abstract page.
 \AtBeginEnvironment{abstract}{
   \renewcommand\abstractname{\zihao{3}\bfseries 摘\hspace{2em}要}
-  \pagestyle{plain}
-  \cfoot{\zihao{-5} \thepage}
-  \pagenumbering{Roman}
+  % \pagestyle{plain}
+  % \cfoot{\zihao{-5} \thepage}
+  % \pagenumbering{Roman}
 }
 
-\AtEndEnvironment{abstract}{
-  \clearpage
-  % \pagestyle{fancy} % 
-}
+% For jounral articles with short abstract we usually do not clear page after
+% the abstract.
+%
+% \AtEndEnvironment{abstract}{
+%   \clearpage
+%   % \pagestyle{fancy} % 
+% }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Math fomulas and theorem environment.
 
@@ -251,6 +240,7 @@ Just choose `xelatex', no `pdflatex' or `latex' and so on.}
 \setlist[enumerate,itemize,description]{
   align=left,
   leftmargin=0pt,
+  itemindent=\parindent,
   labelsep=0pt,
   itemsep=0pt,
   parsep=0pt,
@@ -319,11 +309,11 @@ Just choose `xelatex', no `pdflatex' or `latex' and so on.}
 \setlength{\bibitemsep}{0bp} % Set the space between the bibliography items.
 \renewcommand{\bibfont}{\zihao{5}} % Fontsize for bibliography.
 
-% Format settings before and after the bibliography. Note that this part of code
-% is designed for natbib, migrated here, and seems not working while using 
-% `biblatex'. That's why I commented it out. However, I don't really shure what 
-% exactly caused this. To figure it out, I need to do some tests. So I will 
-% leave it unremoved.
+% Format settings before and after the bibliography. Note that this part of
+% code is designed for natbib, migrated to here, and seems not working while
+% using `biblatex'. That's why I commented it out. However, I don't really
+% sure what exactly caused this. To figure it out, I need to do some tests. So
+% I will leave it unremoved.
 %
 % \AddToHook{env/thebibliography/before}[add_to_toc]{
 %   \RemoveFromHook{cmd/section/before}[keep_preskip_of_sectitle]
@@ -361,11 +351,6 @@ Just choose `xelatex', no `pdflatex' or `latex' and so on.}
   bookmarksopen=true
 ]{hyperref}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\pesudohookOFpremainbody}{
-  \AddToHook{cmd/section/before}[keep_preskip_of_sectitle]{\vspace*{0pt}}
-  \cntitleinMAINBODY
-  \pagestyle{fancy} % 
-  \fancyhead[C]{\zihao{-5}\dlmudoctrans@tokens@cntitle}
-  \pagenumbering{arabic}
-}
-
+\pagestyle{fancy} % 
+\fancyhead[C]{\zihao{-5}\dlmudoctrans@tokens@cntitle}
+\pagenumbering{arabic}

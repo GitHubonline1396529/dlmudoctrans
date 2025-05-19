@@ -14,9 +14,20 @@
   Undergraduate students of Dalian Maritime University
 }
 \cntitle[2]{非官方大连海事大学本科生毕业外文文献翻译\LaTeX{}模板}
-\author{你的名字}
+\translator{你的名字}
 \sdtID{2220XXXXXX}
 \major{这里写专业年级班级}
+
+\author[a]{张三}
+\author[b]{李四}
+\author[c, *]{Jack Green}
+\author[d]{John Smith}
+
+\affil[a]{国内某知名大学，\ XX市，\ XX省，000000}
+\affil[b]{国内某研究机构，国内某大学，\ XX市，\ XX省，000000}
+\affil[c]{A Famous Foreign University,\ City,\ Country}
+\affil[d]{A Famous Foreign University,\ City,\ Country}
+\affil[*]{通讯作者}
 
 % 导入一个 BIB 文件，用来载入参考文献的信息。BIB 文件的写法可以自己早参考资料，
 % 但大部分英文文献平台都支持直接将参考文献条目导出为 BIB 引用格式。如果你再线上
@@ -38,7 +49,11 @@
 \begin{document}
 
 % `\makepages' 用来生成符合要求的封面格式。
-\makepages
+\makepages % 封面页
+\maketocpages % 目录页
+
+% 初始化正文部分格式并打印正文大标题
+\cntitleinMAINBODY
 
 % 这里是论文的摘要部分。你可以在这里写你的摘要，或者单独另外新建一个“*.tex”文
 % 件，然后使用 `\input{}' 命令导入文件里的内容，都是可以的。视具体情况而定。
