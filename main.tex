@@ -74,21 +74,11 @@
   \keywords{\LaTeX{}, 文档类, 模板}
 \end{abstract}
 
-\tableofcontents\thispagestyle{plain}
-\clearpage % 这个换页命令是格式要求，不要删除。
-
-% `\pesudohookOFpremainbody' 命令是用来设置正文格式的，因为文档类设计的原因，
-% `abstract' 环境开始时有一个用于初始化的钩子，会变更诸如页眉页脚之类的设置，但
-% 是正文和摘要之间隔着一个目录，又不能在摘要环境的末尾直接加钩子，否则目录页的
-% 格式就会变成和正文一样，这是不符合要求的。所以需要这个命令改回来。除此之外，
-% 这个命令还会生成全文正文部分最开头出现一次的文章中文大标题，所以需要放在这个
-% 位置 (目录页后、正文开始之前)，不要删掉。
-\pesudohookOFpremainbody
-\input{mainbody/ch1} \clearpage
-\input{mainbody/ch2} \clearpage
-\input{mainbody/ch3} \clearpage
-\input{mainbody/ch4} \clearpage
-\input{mainbody/conclusion} \clearpage % 结论
+\input{mainbody/ch1}
+\input{mainbody/ch2}
+\input{mainbody/ch3}
+\input{mainbody/ch4}
+\input{mainbody/conclusion} % 结论
 
 \printbibliography[heading=dlmustyled] % 参考文献
 \end{document}
